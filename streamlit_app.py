@@ -46,41 +46,7 @@ menu = st.sidebar.selectbox("Menú", ["Registrar", "Historial", "Resumen mensual
 if menu == "Registrar":
     st.header("Registrar ingreso o gasto")
 
-    # --- Selección de tipo con botones macros ---
-    st.markdown("### Selecciona el tipo de transacción")
-    col1, col2 = st.columns(2)
-
-    if "tipo" not in st.session_state:
-        st.session_state.tipo = "Ingreso"
-
-    def boton_estilizado(nombre, emoji):
-        estilo_activo = (
-            "background-color:#4CAF50; color:white; font-weight:bold; border:none;"
-            "padding:10px; border-radius:8px; width:100%;"
-        )
-        estilo_inactivo = (
-            "background-color:#f0f0f0; color:black; border:1px solid #ccc;"
-            "padding:10px; border-radius:8px; width:100%;"
-        )
-        estilo = estilo_activo if st.session_state.tipo == nombre else estilo_inactivo
-        html = (
-            f"<button style='{estilo}'>{emoji} {nombre}</button>"
-        )
-        return st.markdown(html, unsafe_allow_html=True)
-
-    with col1:
-        if st.button("💰 Ingreso", key="ingreso_btn"):
-            st.session_state.tipo = "Ingreso"
-        boton_estilizado("Ingreso", "💰")
-
-    with col2:
-        if st.button("💸 Gasto", key="gasto_btn"):
-            st.session_state.tipo = "Gasto"
-        boton_estilizado("Gasto", "💸")
-
-    st.markdown(f"**Tipo seleccionado:** {st.session_state.tipo}")
-    tipo = st.session_state.tipo
-
+    tipo = st.radio("Tipo de transacción", ["Ingreso", "Gasto"])
     fecha = st.date_input("Fecha", value=datetime.date.today())
     monto = st.number_input("Monto", min_value=0.0, format="%.2f")
     descripcion = st.text_input("Descripción")
