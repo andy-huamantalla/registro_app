@@ -46,30 +46,31 @@ menu = st.sidebar.selectbox("Menú", ["Registrar", "Historial", "Resumen mensual
 if menu == "Registrar":
     st.header("Registrar ingreso o gasto")
 
-    # --- Selección tipo visual mejorada ---
     st.markdown("### Selecciona el tipo de transacción")
     col1, col2 = st.columns(2)
 
-    if 'tipo' not in st.session_state:
+    if "tipo" not in st.session_state:
         st.session_state.tipo = "Ingreso"
+
+    def estilo_boton(tipo):
+        if st.session_state.tipo == tipo:
+            # Botón activo
+            return f"background-color:#4CAF50; color:white; padding:10px; border-radius:8px; font-weight:bold; text-align:center"
+        else:
+            # Botón inactivo
+            return f"background-color:#f0f0f0; color:#333; padding:10px; border-radius:8px; text-align:center"
 
     with col1:
         if st.button("💰 Ingreso", use_container_width=True):
             st.session_state.tipo = "Ingreso"
+        st.markdown(f"<div style='{estilo_boton('Ingreso')}'>Ingreso</div>", unsafe_allow_html=True)
+
     with col2:
         if st.button("💸 Gasto", use_container_width=True):
             st.session_state.tipo = "Gasto"
+        st.markdown(f"<div style='{estilo_boton('Gasto')}'>Gasto</div>", unsafe_allow_html=True)
 
-    # Mostrar cuál está seleccionado, resaltado
-    st.markdown(
-        f"<div style='padding: 10px; font-size: 18px;'>Tipo seleccionado: "
-        f"<span style='color: white; background-color: #4CAF50; padding: 4px 10px; border-radius: 6px;'>"
-        f"{st.session_state.tipo}</span></div>",
-        unsafe_allow_html=True
-    )
-
-    tipo = st.session_state.tipo  # Este se sigue usando para la lógica
-
+    st.markdown("---")
 
     fecha = st.date_input("Fecha", value=datetime.date.today())
     monto = st.number_input("Monto", min_value=0.0, format="%.2f")
