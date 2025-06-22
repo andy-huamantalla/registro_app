@@ -46,39 +46,30 @@ menu = st.sidebar.selectbox("Menú", ["Registrar", "Historial", "Resumen mensual
 if menu == "Registrar":
     st.header("Registrar ingreso o gasto")
 
-    # --- Selección de tipo con botones macros ---
+    # --- Selección tipo visual mejorada ---
     st.markdown("### Selecciona el tipo de transacción")
     col1, col2 = st.columns(2)
 
-    if "tipo" not in st.session_state:
+    if 'tipo' not in st.session_state:
         st.session_state.tipo = "Ingreso"
 
-    def boton_estilizado(nombre, emoji):
-        estilo_activo = (
-            "background-color:#4CAF50; color:white; font-weight:bold; border:none;"
-            "padding:10px; border-radius:8px; width:100%;"
-        )
-        estilo_inactivo = (
-            "background-color:#f0f0f0; color:black; border:1px solid #ccc;"
-            "padding:10px; border-radius:8px; width:100%;"
-        )
-
-        estilo = estilo_activo if st.session_state.tipo == nombre else estilo_inactivo
-        return st.markdown(
-            f"<button style='{estilo}' onclick='document.getElementById("{nombre}").click()'>{emoji} {nombre}</button>",
-            unsafe_allow_html=True,
-        )
-
     with col1:
-        if st.button("💰 Ingreso", key="ingreso_btn"):
+        if st.button("💰 Ingreso", use_container_width=True):
             st.session_state.tipo = "Ingreso"
-
     with col2:
-        if st.button("💸 Gasto", key="gasto_btn"):
+        if st.button("💸 Gasto", use_container_width=True):
             st.session_state.tipo = "Gasto"
 
-    st.markdown(f"**Tipo seleccionado:** {st.session_state.tipo}")
-    tipo = st.session_state.tipo
+    # Mostrar cuál está seleccionado, resaltado
+    st.markdown(
+        f"<div style='padding: 10px; font-size: 18px;'>Tipo seleccionado: "
+        f"<span style='color: white; background-color: #4CAF50; padding: 4px 10px; border-radius: 6px;'>"
+        f"{st.session_state.tipo}</span></div>",
+        unsafe_allow_html=True
+    )
+
+    tipo = st.session_state.tipo  # Este se sigue usando para la lógica
+
 
     fecha = st.date_input("Fecha", value=datetime.date.today())
     monto = st.number_input("Monto", min_value=0.0, format="%.2f")
