@@ -47,31 +47,42 @@ if menu == "Registrar":
     st.header("Registrar ingreso o gasto")
 
     st.markdown("### Selecciona el tipo de transacción")
-    col1, col2 = st.columns(2)
 
     if "tipo" not in st.session_state:
         st.session_state.tipo = "Ingreso"
 
-    def estilo_boton(tipo):
-        if st.session_state.tipo == tipo:
-            # Botón activo
-            return f"background-color:#4CAF50; color:white; padding:10px; border-radius:8px; font-weight:bold; text-align:center"
-        else:
-            # Botón inactivo
-            return f"background-color:#f0f0f0; color:#333; padding:10px; border-radius:8px; text-align:center"
+    col1, col2 = st.columns(2)
 
-    with col1:
-        if st.button("💰 Ingreso", use_container_width=True):
-            st.session_state.tipo = "Ingreso"
-        st.markdown(f"<div style='{estilo_boton('Ingreso')}'>Ingreso</div>", unsafe_allow_html=True)
+    def boton_estilizado(col, tipo_label, emoji):
+        is_active = st.session_state.tipo == tipo_label
+        color = "#4CAF50" if is_active else "#E0E0E0"
+        texto_color = "white" if is_active else "black"
 
-    with col2:
-        if st.button("💸 Gasto", use_container_width=True):
-            st.session_state.tipo = "Gasto"
-        st.markdown(f"<div style='{estilo_boton('Gasto')}'>Gasto</div>", unsafe_allow_html=True)
+        with col.form(f"form_{tipo_label}"):
+            submitted = st.form_submit_button(
+                label="",
+                use_container_width=True
+            )
+            html_boton = (
+                f"<div style='"
+                f"background-color:{color};"
+                f"color:{texto_color};"
+                f"padding:10px;"
+                f"border-radius:8px;"
+                f"font-weight:bold;"
+                f"text-align:center;"
+                f"cursor:pointer;'>"
+                f"{emoji} {tipo_label}"
+                f"</div>"
+            )
+            st.markdown(html_boton, unsafe_allow_html=True)
 
-    st.markdown("---")
-    
+            if submitted:
+                st.session_state.tipo = tipo_label
+
+    boton_estilizado(col1, "Ingreso", "💰")
+    boton_estilizado(col2, "Gasto", "💸")
+
     tipo = st.session_state.tipo 
 
     fecha = st.date_input("Fecha", value=datetime.date.today())
