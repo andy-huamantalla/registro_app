@@ -71,6 +71,8 @@ if menu == "Registrar":
         st.markdown(f"<div style='{estilo_boton('Gasto')}'>Gasto</div>", unsafe_allow_html=True)
 
     st.markdown("---")
+    
+    tipo = st.session_state.tipo 
 
     fecha = st.date_input("Fecha", value=datetime.date.today())
     monto = st.number_input("Monto", min_value=0.0, format="%.2f")
